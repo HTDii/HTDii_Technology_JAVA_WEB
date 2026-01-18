@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Order Manager</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            margin-bottom: 12px;
+            text-decoration: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #f0f0f0;
+        }
+
+        select {
+            padding: 4px;
+        }
+
+        button {
+            padding: 4px 12px;
+            cursor: pointer;
+        }
+
+        .success {
+            color: green;
+            margin: 10px 0;
+        }
+
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+
+        .done {
+            background: #eee;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/home" class="home-btn">← Back</a>
+
+    <h2>🛠 Admin Order Manager</h2>
+
+    <!-- ===== FLASH MESSAGE ===== -->
+    <div th:if="${success}" class="success" th:text="${success}"></div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Total Token</th>
+                <th>Status</th>
+                <th>Note</th>
+                <th>Created At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:if="${#lists.isEmpty(orders)}">
+                <td colspan="9">No orders found</td>
+            </tr>
+
+            <tr th:each="o : ${orders}"
+                th:classappend="${o.status.name() == 'COMPLETED' || o.status.name() == 'CANCELLED'} ? 'done'">
+
+                <td th:text="${o.userId}"></td>
+                <td th:text="${o.productId}"></td>
+                <td th:text="${o.productName}"></td>
+                <td th:text="${o.quantity}"></td>
+                <td th:text="${o.priceToken}"></td>
+
+                <!-- ===== UPDATE STATUS FORM ===== -->
+                <td>
+                    <form action="/admin/order/update-status" method="post">
+
+                        <!-- KEY DUY NHẤT -->
+                        <input type="hidden" name="orderId" th:value="${o.id}">
+
+                        <select name="status">
+                            <option value="PENDING" th:selected="${o.status.name() == 'PENDING'}">PENDING</option>
+
+                            <option value="CONFIRMED" th:selected="${o.status.name() == 'CONFIRMED'}">CONFIRMED</option>
+
+                            <option value="PROCESSING" th:selected="${o.status.name() == 'PROCESSING'}">PROCESSING
+                            </option>
+
+                            <option value="COMPLETED" th:selected="${o.status.name() == 'COMPLETED'}">COMPLETED</option>
+
+                            <option value="CANCELLED" th:selected="${o.status.name() == 'CANCELLED'}">CANCELLED</option>
+                        </select>
+                </td>
+
+                <td th:text="${o.note}"></td>
+
+                <td th:text="${#temporals.format(o.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                <td>
+                    <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</body>
+
+</html>

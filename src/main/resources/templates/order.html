@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Order</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        /* ===== FULL SCREEN LAYOUT ===== */
+        body {
+            background: linear-gradient(135deg, #e3f2fd, #e8f5e9);
+            color: #222;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        h2 {
+            margin: 0;
+            padding: 16px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: #00695c;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        /* ===== MAIN CONTENT (FULL HEIGHT) ===== */
+        body>div,
+        body>form {
+            width: 100%;
+            padding: 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        /* PRODUCT INFO */
+        p {
+            margin: 12px 0;
+            font-size: 15px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        b {
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: #00796b;
+        }
+
+        /* ===== FORM ===== */
+        form {
+            flex: 1;
+            /* CHIẾM HẾT CHIỀU CAO CÒN LẠI */
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 15px;
+        }
+
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #cfd8dc;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: none;
+            min-height: 80px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #26a69a;
+            box-shadow: 0 0 0 2px rgba(38, 166, 154, 0.25);
+        }
+
+        #total {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00897b;
+        }
+
+        /* ===== BUTTON AREA ===== */
+        button {
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #26a69a, #2bbbad);
+            color: #ffffff;
+        }
+
+        .back-btn {
+            background: #ffffff;
+            color: #00796b;
+            border: 2px solid #b2dfdb;
+        }
+
+        /* ===== FLASH MESSAGE ===== */
+        [style*="color:green"] {
+            background: #e8f5e9;
+            color: #2e7d32 !important;
+            padding: 14px;
+        }
+
+        [style*="color:red"] {
+            background: #ffebee;
+            color: #c62828 !important;
+            padding: 14px;
+        }
+
+        /* ===== DESKTOP TWEAK ===== */
+        @media (min-width: 768px) {
+            body {
+                max-width: 720px;
+                margin: 0 auto;
+                height: 100vh;
+            }
+        }
+    </style>
+
+    <script>
+        function updateTotal() {
+            const price = Number(document.getElementById("price").innerText);
+            const qty = Number(document.getElementById("quantity").value || 1);
+            document.getElementById("total").innerText = price * qty;
+        }
+    </script>
+</head>
+
+<body>
+
+    <h2>Confirm Purchase</h2>
+
+    <div>
+        <p><b>Product</b><span th:text="${product.productName}"></span></p>
+        <p><b>Description</b><span th:text="${product.shortDescription}"></span></p>
+        <p><b>Price</b>💎 <span id="price" th:text="${product.priceToken}"></span> Tokens / unit</p>
+        <p><b>Your balance</b>💎 <span th:text="${user.tokenBalance}"></span></p>
+    </div>
+
+    <div th:if="${success}">
+        <p th:text="${success}"></p>
+    </div>
+
+    <div th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form th:action="@{/order/confirm}" method="post">
+
+        <input type="hidden" name="productId" th:value="${product.id}">
+
+        <label>
+            Quantity
+            <input type="number" id="quantity" name="quantity" value="1" min="1" th:attr="max=${product.quantity}"
+                oninput="updateTotal()" required>
+        </label>
+
+        <label>
+            Note (optional)
+            <textarea name="note" rows="3"></textarea>
+        </label>
+
+        <p><b>Total cost</b>💎 <span id="total"></span> Tokens</p>
+
+        <button type="submit">Confirm Buy</button>
+        <button type="button" class="back-btn" onclick="location.href='/home'">Back to Home</button>
+
+    </form>
+
+    <script>
+        updateTotal();
+    </script>
+
+</body>
+
+</html>

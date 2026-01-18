@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin: 0;
+            padding: 16px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 30px;
+            width: 100%;
+            max-width: 360px;
+
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 22px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: 0.3s;
+
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 6px rgba(102, 126, 234, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .message {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 14px;
+            min-height: 16px;
+        }
+
+        .error {
+            color: #e53935;
+        }
+
+        .success {
+            color: #2e7d32;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .back a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .back a:hover {
+            text-decoration: underline;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            input {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 15px;
+            }
+
+            .back a {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>Create Account</h2>
+
+        <form action="/register" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="phone" placeholder="Phone number" required>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <!-- ERROR MESSAGE -->
+        <p class="message error" th:if="${error}" th:text="${error}"></p>
+
+        <!-- SUCCESS MESSAGE -->
+        <p class="message success" th:if="${success}" th:text="${success}"></p>
+
+        <div class="back">
+            <a href="/login">Already have an account? Sign in</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

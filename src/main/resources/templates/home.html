@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+
+<body>
+
+    <!-- CANVAS EFFECT (BACKGROUND) -->
+    <canvas id="canvas"></canvas>
+
+    <!-- ===== TOP RIGHT (NOT LOGIN) ===== -->
+    <div class="top-menu" th:if="${user == null}">
+        <a class="btn" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+    </div>
+
+    <!-- ===== TOP RIGHT (LOGGED IN) ===== -->
+    <div class="top-menu" th:if="${user != null}">
+        <span class="btn">
+            👋 <span th:text="${user.username}"></span>
+        </span>
+
+        <div class="balance-chip" th:if="${user.role != 'ADMIN'}">
+            💎 <span class="balance-number" th:text="${user.tokenBalance}"></span>
+            <span class="balance-label">Tokens💎</span>
+        </div>
+
+        <!-- ✅ CHARGE TOKEN BUTTON -->
+        <a class="btn btn-charge" th:if="${user.role != 'ADMIN'}" href="/chargetoken">
+            💳 Charge Token
+        </a>
+
+        <a class="btn" href="/account">My Account</a>
+
+        <a class="btn" th:if="${user.role != 'ADMIN'}" href="/order-history">
+            📦 Order History
+        </a>
+
+        <a class="btn btn-admin" th:if="${user.role == 'ADMIN'}" href="/admin-order-manager">
+            📦 Order Manager
+        </a>
+
+        <a class="btn btn-admin" th:if="${user.role == 'ADMIN'}" href="/manager">
+            Token Manager
+        </a>
+
+        <a class="btn btn-admin" th:if="${user.role == 'ADMIN'}" href="/manager-products">
+            Products Manager
+        </a>
+
+        <a class="btn btn-danger" href="/logout">Logout</a>
+    </div>
+
+    <!-- ===== USER TOKEN HISTORY ===== -->
+    <div class="user-history" th:if="${user != null and user.role != 'ADMIN'}">
+        <h3>💎 Token Activity</h3>
+
+        <div class="history-list">
+            <div th:if="${#lists.isEmpty(tokenHistories)}" class="history-item">
+                No activity yet.
+            </div>
+
+            <div th:each="h : ${tokenHistories}"
+                th:class="'history-item ' + (${h.changeAmount} >= 0 ? 'success' : 'subtract')">
+
+                <div class="history-top">
+                    <span th:text="${h.changeAmount >= 0 ? 'Token Added' : 'Token Used'}"></span>
+                    <span th:text="${h.changeAmount > 0 ? '+' : ''} + ${h.changeAmount}"></span>
+                </div>
+
+                <div class="history-note" th:text="${h.note}"></div>
+                <div class="history-time" th:text="${h.createdAt}"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PRODUCT LIST ===== -->
+    <div class="product-wrapper">
+        <div class="product-grid">
+
+            <div class="product-card" th:each="p : ${products.?[status == 'ACTIVE']}">
+                <h3 th:text="${p.productName}"></h3>
+                <p class="short-desc" th:text="${p.shortDescription}"></p>
+
+                <div class="price">
+                    💎 <span th:text="${p.priceToken}"></span> Tokens💎
+                </div>
+
+                <div class="status">
+                    Stock: <span th:text="${p.quantity}"></span>
+                </div>
+
+                <div class="actions">
+                    <form th:action="@{/order}" method="get">
+                        <input type="hidden" name="productId" th:value="${p.id}">
+                        <button type="submit">Buy</button>
+                    </form>
+                </div>
+            </div>
+
+            <div th:if="${products == null || #lists.isEmpty(products.?[status == 'ACTIVE'])}"
+                style="opacity:.8; padding:12px;">
+                No products available
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script th:src="@{/js/home.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 24px;
+            background: #f5f5f5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        th {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>🧾 Order History</h2>
+    <a href="/home">← Back to Home</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price (Token)</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Purchased At</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:if="${#lists.isEmpty(orderHistories)}">
+                <td colspan="5">No orders yet</td>
+            </tr>
+
+            <tr th:each="o : ${orderHistories}">
+                <td th:text="${o.productName}"></td>
+                <td th:text="${o.priceToken}"></td>
+                <td th:text="${o.quantity}"></td>
+                <td th:text="${o.status}"></td>
+                <td th:text="${o.createdAt}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>

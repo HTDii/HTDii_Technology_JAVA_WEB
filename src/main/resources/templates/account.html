@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Account</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .card {
+            width: 420px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .username {
+            color: #7dd3fc;
+        }
+
+        /* ===== INFO SECTION ===== */
+        .info-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            opacity: 0.75;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #e0f2fe;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 22px 0;
+        }
+
+        /* ===== FORM ===== */
+        form {
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(56, 189, 248, 0.6);
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .error {
+            color: #fca5a5;
+        }
+
+        .success {
+            color: #86efac;
+        }
+
+        .back {
+            display: block;
+            margin-top: 22px;
+            text-align: center;
+            text-decoration: none;
+            color: #e5e7eb;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .back:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>
+            Account: <span class="username" th:text="${user.username}"></span>
+        </h2>
+
+        <!-- ===== USER INFO ===== -->
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">User name:</span>
+                <span class="info-value" th:text="${user.username}"></span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value" th:text="${user.email}"></span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Phone number:</span>
+                <span class="info-value" th:text="${user.phone}"></span>
+            </div>
+
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ===== CHANGE PASSWORD ===== -->
+        <form th:action="@{/account/change-password}" method="post" onsubmit="return showLoading()">
+            <input type="password" name="oldPassword" placeholder="Old password" required>
+            <input type="password" name="newPassword" placeholder="New password" required>
+            <button type="submit" id="btn">Change Password</button>
+        </form>
+
+        <!-- ERROR -->
+        <p class="message error" th:if="${error}" th:text="${error}"></p>
+
+        <!-- SUCCESS -->
+        <p class="message success" th:if="${success}" th:text="${success}"></p>
+
+        <a class="back" th:href="@{/home}">← Back to Home</a>
+    </div>
+
+    <script>
+        function showLoading() {
+            const btn = document.getElementById("btn");
+            btn.innerText = "Updating...";
+            btn.disabled = true;
+            return true;
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTDii Technology</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== BACKGROUND IMAGE ===== */
+        .bg-image {
+            position: fixed;
+            inset: 0;
+            background: url('/img/AI-machine-learning.jpeg') no-repeat center center;
+            background-size: cover;
+            z-index: -2;
+        }
+
+        /* ===== OVERLAY ===== */
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: -1;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            padding: 24px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            text-align: center;
+        }
+
+        /* ===== TITLE ===== */
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ===== BUTTON ===== */
+        .btn {
+            width: 100%;
+            max-width: 360px;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            color: #222;
+            background: #ffffff;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .btn-home {
+            background: #ffdd57;
+        }
+
+        .btn-web {
+            background: #4dd0e1;
+        }
+
+        .btn-chat {
+            background: #81c784;
+        }
+
+        /* ===== TABLET ===== */
+        @media (min-width: 600px) {
+            .title {
+                font-size: 42px;
+            }
+
+            .btn {
+                max-width: 420px;
+                font-size: 24px;
+                padding: 22px;
+            }
+        }
+
+        /* ===== DESKTOP ===== */
+        @media (min-width: 1024px) {
+            .container {
+                gap: 28px;
+            }
+
+            .title {
+                font-size: 46px;
+            }
+
+            .btn {
+                max-width: 460px;
+                font-size: 24px;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="container">
+        <div class="title">HTDii Technology</div>
+
+        <a class="btn btn-home" href="/login">
+            🏠 SNS SUPPORT
+        </a>
+
+        <!-- <a class="btn btn-web" href="/web">
+            🌐 Web System
+        </a> -->
+
+        <a class="btn btn-chat" href="/chatbot">
+            🤖 Chatbot AI
+        </a>
+    </div>
+
+</body>
+
+</html>

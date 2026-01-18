@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+        }
+
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn-logout {
+            background: rgba(229, 57, 53, 0.8);
+        }
+
+        .btn-logout:hover {
+            background: rgba(229, 57, 53, 1);
+        }
+
+        h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 14px;
+            padding: 25px;
+            max-width: 1200px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.15);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background: #ff9800;
+            color: #000;
+        }
+
+        .badge-user {
+            background: #03a9f4;
+            color: #000;
+        }
+
+        .token-form {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .token-input {
+            width: 80px;
+            padding: 6px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .note-input {
+            width: 160px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 6px 14px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-update {
+            background: #00e5ff;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .btn-delete {
+            background: #e53935;
+            color: #fff;
+        }
+
+        .btn-admin {
+            background: #43a047;
+            color: #fff;
+        }
+
+        .btn-history {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .history-panel {
+            display: none;
+            margin-top: 8px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            max-width: 360px;
+        }
+
+        .history-item {
+            font-size: 13px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+            padding: 6px 0;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .muted {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <h2>User Management</h2>
+        <a href="/logout" class="btn btn-logout">Logout</a>
+    </div>
+    <div class="top-bar">
+        <a href="/home" class="btn btn-logout">Back</a>
+    </div>
+    <div th:if="${success}" style="background:#2e7d32;color:white;padding:10px;margin-bottom:10px;">
+        <span th:text="${success}"></span>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Token + Note</th>
+                    <th>History</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.id}"></td>
+                    <td th:text="${u.username}"></td>
+
+                    <td>
+                        <span th:if="${u.role == 'ADMIN'}" class="badge badge-admin">ADMIN</span>
+                        <span th:if="${u.role != 'ADMIN'}" class="badge badge-user">USER</span>
+                    </td>
+
+                    <!-- TOKEN + NOTE -->
+                    <td th:if="${u.role != 'ADMIN'}">
+                        <form class="token-form" th:action="@{/manager/update-balance}" method="post">
+                            <input type="hidden" name="id" th:value="${u.id}">
+                            <input class="token-input" type="number" min="0" name="balance" th:value="${u.tokenBalance}"
+                                required>
+                            <input class="note-input" type="text" name="note" placeholder="Note (optional)">
+                            <button class="btn-update" type="submit">Update</button>
+                        </form>
+                    </td>
+
+                    <td th:if="${u.role == 'ADMIN'}">
+                        <span class="muted">—</span>
+                    </td>
+
+                    <!-- HISTORY -->
+                    <td th:if="${u.role != 'ADMIN'}">
+                        <button class="btn-history" type="button"
+                            th:attr="data-target='history-' + ${u.id}">View</button>
+
+                        <div class="history-panel" th:id="'history-' + ${u.id}">
+                            <div th:each="h : ${tokenHistoryMap[u.id]}" class="history-item">
+                                <div>
+                                    <b th:text="${h.actionType}"></b>
+                                    <span class="muted" th:text="${h.createdAt}"></span>
+                                </div>
+                                <div>
+                                    Old <span th:text="${h.oldBalance}"></span>
+                                    → New <span th:text="${h.newBalance}"></span>
+                                    (Δ <span th:text="${h.changeAmount}"></span>)
+                                </div>
+                                <div class="muted" th:if="${h.note != null}" th:text="${h.note}"></div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td th:if="${u.role == 'ADMIN'}">
+                        <span class="muted">—</span>
+                    </td>
+
+                    <!-- ACTION -->
+                    <td>
+                        <form th:if="${u.role != 'ADMIN'}" th:action="@{/manager/delete}" method="post"
+                            style="display:inline">
+                            <input type="hidden" name="id" th:value="${u.id}">
+                            <button class="btn-delete">Delete</button>
+                        </form>
+
+                        <form th:if="${u.role != 'ADMIN'}" th:action="@{/manager/make-admin}" method="post"
+                            style="display:inline">
+                            <input type="hidden" name="id" th:value="${u.id}">
+                            <button class="btn-admin">Make Admin</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("click", function (e) {
+            const btn = e.target.closest(".btn-history");
+            if (!btn) return;
+
+            const panel = document.getElementById(btn.dataset.target);
+            panel.style.display = panel.style.display === "block" ? "none" : "block";
+        });
+    </script>
+
+</body>
+
+</html>

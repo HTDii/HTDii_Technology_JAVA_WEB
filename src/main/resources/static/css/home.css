@@ -1,0 +1,255 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ================= BODY ================= */
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at top,
+            #0f2027,
+            #203a43,
+            #2c5364);
+    color: white;
+
+    position: relative;
+    z-index: 0;
+}
+
+/* ================= CANVAS BACKGROUND ================= */
+/* 🔥 FIX TRIỆT ĐỂ – LUÔN SAU UI */
+
+#canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ================= TOP MENU ================= */
+
+.top-menu {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+
+    padding: 16px 24px;
+    flex-wrap: wrap;
+    row-gap: 10px;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* ================= BUTTON ================= */
+
+.btn {
+    padding: 10px 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-decoration: none;
+    transition: .25s;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.btn-danger {
+    background: rgba(229, 57, 53, .6);
+}
+
+.btn-admin {
+    background: rgba(255, 152, 0, .6);
+}
+
+/* ================= BALANCE ================= */
+
+.balance-chip {
+    padding: 10px 22px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ddff00, #ff0077);
+    color: #222;
+    font-weight: bold;
+}
+
+/* ================= MAIN LAYOUT ================= */
+/* DESKTOP: 2 CỘT */
+
+@media (min-width: 1025px) {
+    body {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        align-items: start;
+    }
+
+    .top-menu {
+        grid-column: 1 / -1;
+    }
+}
+
+/* ================= USER TOKEN HISTORY ================= */
+
+.user-history {
+    margin: 20px;
+    max-height: calc(100vh - 160px);
+    padding: 18px;
+    background: rgba(255, 255, 255, .12);
+    border-radius: 18px;
+    overflow-y: auto;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* Scrollbar */
+.user-history::-webkit-scrollbar {
+    width: 6px;
+}
+
+.user-history::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .4);
+    border-radius: 10px;
+}
+
+/* HISTORY ITEM */
+
+.history-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, .25);
+    font-size: 13px;
+}
+
+.success {
+    border-left: 4px solid #00e676;
+}
+
+.subtract {
+    border-left: 4px solid #ff5252;
+}
+
+/* ================= PRODUCT LIST ================= */
+
+.product-wrapper {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+
+    position: relative;
+    z-index: 2;
+}
+
+.product-grid {
+    width: 100%;
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: rgba(255, 255, 255, .12);
+    border-radius: 16px;
+    padding: 18px;
+}
+
+.short-desc {
+    opacity: .85;
+    font-size: 14px;
+}
+
+.price {
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+/* ================= BUY BUTTON ================= */
+
+.actions {
+    margin-top: 12px;
+}
+
+.actions button {
+    width: 100%;
+    padding: 6px 0;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+
+    color: #222;
+    background: linear-gradient(135deg,
+            #ffd54f,
+            #ffb300,
+            #ff9800);
+
+    box-shadow:
+        0 8px 20px rgba(255, 193, 7, 0.45),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+
+    transition: all .25s ease;
+}
+
+.actions button:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+        0 12px 28px rgba(255, 193, 7, 0.65);
+}
+
+.actions button:active {
+    transform: scale(.97);
+    box-shadow:
+        0 4px 12px rgba(255, 193, 7, 0.4);
+}
+
+/* ================= TABLET & MOBILE ================= */
+
+@media (max-width: 1024px) {
+    body {
+        display: block;
+    }
+
+    .user-history {
+        margin: 20px 16px;
+        max-height: 300px;
+    }
+
+    .product-wrapper {
+        padding: 0 16px 30px;
+    }
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+    .top-menu {
+        justify-content: center;
+    }
+
+    .btn,
+    .balance-chip {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .actions button {
+        font-size: 20px;
+        padding: 8px 0;
+        border-radius: 16px;
+    }
+}

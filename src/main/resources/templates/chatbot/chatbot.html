@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- 🔥 BẮT BUỘC CHO RESPONSIVE MOBILE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chatbot AI</title>
+    <link rel="stylesheet" href="/css/chatbot.css">
+</head>
+
+<body>
+
+    <canvas id="matrix"></canvas>
+
+    <div class="chat-container">
+
+        <!-- HEADER -->
+        <div class="chat-header">
+            <button onclick="location.href='/index'">← Back home</button>
+            <span id="chat-title">Chatbot AI</span>
+            <button onclick="resetChat()" class="reset-btn">🔄 Reset</button>
+        </div>
+
+        <!-- CHỌN NGÔN NGỮ (BƯỚC 1) -->
+        <div class="lang-select" id="langSelect">
+            <button onclick="selectLang('JP')">🇯🇵 JP</button>
+            <button onclick="selectLang('EN')">🇺🇸 EN</button>
+            <button onclick="selectLang('VI')">🇻🇳 VI</button>
+        </div>
+
+        <!-- CHAT BODY -->
+        <div class="chat-body" id="chatBody">
+            <div class="message bot">
+                🤖 Please select your language to continue (chat will be temporarily locked until you complete the
+                interaction).<br>
+                (言語を選択して続行してください。操作が完了するまでチャット機能は一時的にロックされます。<br>
+                Vui lòng chọn ngôn ngữ để bắt đầu, chức năng chat sẽ tạm khoá cho đến khi bạn chọn xong các bước tương
+                tác.)
+            </div>
+        </div>
+
+        <!-- INPUT CHAT (BƯỚC SAU) -->
+        <div class="chat-input">
+            <input id="messageInput" placeholder="Nhập tin nhắn..." disabled />
+            <button onclick="sendMessage()" disabled>Gửi</button>
+        </div>
+
+    </div>
+
+    <script src="/js/chatbot.js"></script>
+</body>
+
+</html>

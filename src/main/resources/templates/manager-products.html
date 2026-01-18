@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Product Manager</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 24px;
+            background: #f5f5f5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        input,
+        textarea,
+        select,
+        button {
+            width: 100%;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        textarea {
+            height: 50px;
+        }
+
+        .box {
+            background: #fff;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .actions form {
+            margin-bottom: 6px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            padding: 6px 12px;
+            background: #1976d2;
+            color: white;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== TOP BAR ===== -->
+    <div class="top-bar">
+        <h2>Product Manager</h2>
+        <a class="back-btn" href="/home">← Back to Home</a>
+    </div>
+
+    <!-- ===== ADD PRODUCT ===== -->
+    <div class="box">
+        <h3>Add Product</h3>
+
+        <div th:if="${success}" style="background:#2e7d32;color:white;padding:10px;margin-bottom:10px;">
+            <span th:text="${success}"></span>
+        </div>
+
+        <form action="/manager-products/create" method="post">
+            <input name="productName" placeholder="Name" required>
+
+            <input name="shortDescription" placeholder="Short description">
+
+            <input type="number" name="priceToken" placeholder="Price token" min="0" required>
+
+            <!-- ✅ QUANTITY -->
+            <input type="number" name="quantity" placeholder="Quantity" min="0" required>
+
+            <select name="status">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+            </select>
+
+            <textarea name="description" placeholder="Description"></textarea>
+
+            <button type="submit">Create</button>
+        </form>
+    </div>
+
+    <!-- ===== PRODUCT LIST ===== -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>EDIT PRODUCT</th>
+                <th>Quantity</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:if="${#lists.isEmpty(products)}">
+                <td colspan="6">No products</td>
+            </tr>
+
+            <tr th:each="p : ${products}">
+                <td th:text="${p.id}"></td>
+
+                <!-- UPDATE FORM -->
+                <td>
+                    <form action="/manager-products/update" method="post">
+                        <input type="hidden" name="id" th:value="${p.id}">
+
+                        <input name="productName" th:value="${p.productName}">
+                        <input name="shortDescription" th:value="${p.shortDescription}">
+                        <textarea name="description" th:text="${p.description}"></textarea>
+                        <input type="number" name="priceToken" th:value="${p.priceToken}">
+
+                        <!-- ✅ QUANTITY UPDATE -->
+                        <input type="number" name="quantity" th:value="${p.quantity}" min="0">
+
+                        <select name="status">
+                            <option value="ACTIVE" th:selected="${p.status == 'ACTIVE'}">ACTIVE</option>
+                            <option value="INACTIVE" th:selected="${p.status == 'INACTIVE'}">INACTIVE</option>
+                        </select>
+
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+
+                <!-- HIỂN THỊ QUANTITY -->
+                <td th:text="${p.quantity}"></td>
+
+                <td th:text="${p.createdAt}"></td>
+                <td th:text="${p.updatedAt}"></td>
+
+                <!-- ACTIONS -->
+                <td class="actions">
+                    <form action="/manager-products/hide" method="post">
+                        <input type="hidden" name="id" th:value="${p.id}">
+                        <button type="submit">Hide</button>
+                    </form>
+
+                    <form action="/manager-products/delete" method="post"
+                        onsubmit="return confirm('Delete permanently?')">
+                        <input type="hidden" name="id" th:value="${p.id}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>
