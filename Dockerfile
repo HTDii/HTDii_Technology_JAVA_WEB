@@ -1,11 +1,18 @@
-FROM eclipse-temurin:21-jdk
-
+# ===== BUILD STAGE =====
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-RUN ./mvnw clean package -DskipTests
+COPY . .
+RUN mvn clean package -DskipTests
+
+# ===== RUN STAGE =====
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 5000
-
-CMD ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
